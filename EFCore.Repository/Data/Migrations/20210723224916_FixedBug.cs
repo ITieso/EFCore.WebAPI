@@ -1,25 +1,24 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EFCore.WebAPI.Data.Infrastructure.Migrations
+namespace EFCore.Repository.Data.Migrations
 {
-    public partial class InitalCreate : Migration
+    public partial class FixedBug : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Equipes",
+                name: "Mapas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Terreno = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TempoDeGame = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Equipes", x => x.Id);
+                    table.PrimaryKey("PK_Mapas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -28,18 +27,11 @@ namespace EFCore.WebAPI.Data.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EquipeId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Personagens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Personagens_Equipes_EquipeId",
-                        column: x => x.EquipeId,
-                        principalTable: "Equipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +41,6 @@ namespace EFCore.WebAPI.Data.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Calibre = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PersonagemId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -57,6 +48,30 @@ namespace EFCore.WebAPI.Data.Infrastructure.Migrations
                     table.PrimaryKey("PK_Armas", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Armas_Personagens_PersonagemId",
+                        column: x => x.PersonagemId,
+                        principalTable: "Personagens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonagemMapas",
+                columns: table => new
+                {
+                    PersonagemId = table.Column<int>(type: "int", nullable: false),
+                    MapaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonagemMapas", x => new { x.MapaId, x.PersonagemId });
+                    table.ForeignKey(
+                        name: "FK_PersonagemMapas_Mapas_MapaId",
+                        column: x => x.MapaId,
+                        principalTable: "Mapas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonagemMapas_Personagens_PersonagemId",
                         column: x => x.PersonagemId,
                         principalTable: "Personagens",
                         principalColumn: "Id",
@@ -89,9 +104,9 @@ namespace EFCore.WebAPI.Data.Infrastructure.Migrations
                 column: "PersonagemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Personagens_EquipeId",
-                table: "Personagens",
-                column: "EquipeId");
+                name: "IX_PersonagemMapas_PersonagemId",
+                table: "PersonagemMapas",
+                column: "PersonagemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Skins_PersonagemId",
@@ -105,13 +120,16 @@ namespace EFCore.WebAPI.Data.Infrastructure.Migrations
                 name: "Armas");
 
             migrationBuilder.DropTable(
+                name: "PersonagemMapas");
+
+            migrationBuilder.DropTable(
                 name: "Skins");
 
             migrationBuilder.DropTable(
-                name: "Personagens");
+                name: "Mapas");
 
             migrationBuilder.DropTable(
-                name: "Equipes");
+                name: "Personagens");
         }
     }
 }
