@@ -29,25 +29,26 @@ namespace EFCore.Repository.Data
                 entity.HasKey(e => new { e.MapaId, e.PersonagemId });
                 });
 
-            modelBuilder.Entity<Personagem>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
+            //modelBuilder.Entity<Personagem>(entity =>
+            //{
+            //    entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Skin>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
+            //});
 
-            modelBuilder.Entity<Arma>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
+            //modelBuilder.Entity<Skin>(entity =>
+            //{
+            //    entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            //});
 
-            modelBuilder.Entity<Mapa>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
+            //modelBuilder.Entity<Arma>(entity =>
+            //{
+            //    entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            //});
+
+            //modelBuilder.Entity<Mapa>(entity =>
+            //{
+            //    entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            //});
         }
     }
 }

@@ -4,14 +4,16 @@ using EFCore.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFCore.Repository.Data.Migrations
 {
     [DbContext(typeof(PersonagemContext))]
-    partial class PersonagemContextModelSnapshot : ModelSnapshot
+    [Migration("20210727193044_RemoveList")]
+    partial class RemoveList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

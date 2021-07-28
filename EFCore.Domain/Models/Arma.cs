@@ -10,7 +10,6 @@ namespace EFCore.Domain.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Personagem> Personagem { get; set; }
-        public int PersonagemId { get; set; }
+        public Personagem Personagem { get; set; }
     }
 }

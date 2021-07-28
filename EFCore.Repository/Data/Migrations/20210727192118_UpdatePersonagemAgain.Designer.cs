@@ -4,20 +4,37 @@ using EFCore.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFCore.Repository.Data.Migrations
 {
     [DbContext(typeof(PersonagemContext))]
-    partial class PersonagemContextModelSnapshot : ModelSnapshot
+    [Migration("20210727192118_UpdatePersonagemAgain")]
+    partial class UpdatePersonagemAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ArmaPersonagem", b =>
+                {
+                    b.Property<int>("ArmasId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonagemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArmasId", "PersonagemId");
+
+                    b.HasIndex("PersonagemId");
+
+                    b.ToTable("ArmaPersonagem");
+                });
 
             modelBuilder.Entity("EFCore.Domain.Models.Arma", b =>
                 {
@@ -29,12 +46,7 @@ namespace EFCore.Repository.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PersonagemId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PersonagemId");
 
                     b.ToTable("Armas");
                 });
@@ -110,13 +122,19 @@ namespace EFCore.Repository.Data.Migrations
                     b.ToTable("Skins");
                 });
 
-            modelBuilder.Entity("EFCore.Domain.Models.Arma", b =>
+            modelBuilder.Entity("ArmaPersonagem", b =>
                 {
-                    b.HasOne("EFCore.Domain.Models.Personagem", "Personagem")
-                        .WithMany("Armas")
-                        .HasForeignKey("PersonagemId");
+                    b.HasOne("EFCore.Domain.Models.Arma", null)
+                        .WithMany()
+                        .HasForeignKey("ArmasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Personagem");
+                    b.HasOne("EFCore.Domain.Models.Personagem", null)
+                        .WithMany()
+                        .HasForeignKey("PersonagemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EFCore.Domain.Models.PersonagemMapa", b =>
@@ -154,8 +172,6 @@ namespace EFCore.Repository.Data.Migrations
 
             modelBuilder.Entity("EFCore.Domain.Models.Personagem", b =>
                 {
-                    b.Navigation("Armas");
-
                     b.Navigation("PersonagemMapas");
 
                     b.Navigation("Skins");
